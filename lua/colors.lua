@@ -1,7 +1,6 @@
 print("hello from colors")
 
 local rainbow_delimiters = require 'rainbow-delimiters'
-
 function ColorMyPencils()
     vim.cmd.colorscheme("arctic")
 
@@ -54,7 +53,24 @@ function ColorMyPencils()
         'DelimeterPink',
         'DelimeterBlue',
     },
-}
+    }
+
+    vim.fn.sign_define('DapBreakpoint', {
+        text='🛑',
+        texthl='',
+        linehl='',
+        numhl=''
+    })
+
+    vim.api.nvim_set_hl(0, "DapLine", { bg = '#070707' } )
+
+    vim.fn.sign_define('DapStopped',
+    {
+        text='🔴', -- nerdfonts icon here
+        texthl='',
+        linehl='DapLine',
+        numhl=''
+    })
 
 end
 

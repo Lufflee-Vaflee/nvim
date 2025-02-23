@@ -18,5 +18,9 @@ require("TreeSitterInit")
 
 require("LSP")
 
+require("DAP")
+
 require("finders")
+
+require("line")
 

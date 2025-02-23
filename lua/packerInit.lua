@@ -5,7 +5,7 @@ print("Hello form packer")
 vim.cmd [[packadd packer.nvim]]
 
 return require('packer').startup(function(use)
-    use 'wbthomason/packer.nvim'
+    use { 'wbthomason/packer.nvim' }
 
     use {
         'nvim-tree/nvim-tree.lua',
@@ -25,11 +25,21 @@ return require('packer').startup(function(use)
         requires = { "rktjmp/lush.nvim" }
     }
 
-    use 'freddiehaddad/feline.nvim'
-
     use ('nvim-treesitter/nvim-treesitter', {run = ':TSUpdate'})
 
     use { 'HiPhish/rainbow-delimiters.nvim' }
+
+    use { 'williamboman/mason.nvim',
+        opts = {
+            ensure_installed = {
+                "clangd",
+                "cmake-language-server",
+                "gopls",
+                "lua-language-server",
+                "codelldb"
+            }
+        }
+    }
 
     use {
         'VonHeikemen/lsp-zero.nvim',
@@ -44,5 +54,25 @@ return require('packer').startup(function(use)
             {'L3MON4D3/LuaSnip'},
         }
     }
+
+    use {
+        "mfussenegger/nvim-dap",
+        requires = {
+            "williamboman/mason.nvim",
+        }
+    }
+
+    use { "rcarriga/nvim-dap-ui",
+    requires = {
+            "mfussenegger/nvim-dap",
+            "nvim-neotest/nvim-nio"
+        }
+    }
+
+    use {
+        'nvim-lualine/lualine.nvim',
+        requires = { 'nvim-tree/nvim-web-devicons', opt = true }
+    }
+
 end)
 
