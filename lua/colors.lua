@@ -55,6 +55,10 @@ function ColorMyPencils()
     },
     }
 
+    vim.opt.cursorline = true
+
+    vim.api.nvim_set_hl(0, "CursorLine", {bg = '#2a2d2e'} )
+
     vim.fn.sign_define('DapBreakpoint', {
         text='🛑',
         texthl='',
@@ -62,11 +66,11 @@ function ColorMyPencils()
         numhl=''
     })
 
-    vim.api.nvim_set_hl(0, "DapLine", { bg = '#070707' } )
+    vim.api.nvim_set_hl(0, "DapLine", { bg = '#002936' } )
 
     vim.fn.sign_define('DapStopped',
     {
-        text='🔴', -- nerdfonts icon here
+        text=' ', -- nerdfonts icon here
         texthl='',
         linehl='DapLine',
         numhl=''

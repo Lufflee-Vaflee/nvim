@@ -6,18 +6,41 @@ function ClearCachedELF()
     vim.env.DAP_executable = "empty"
 end
 
+function CheckFile(file_path)
+    -- Check if file exists
+    local file_exists = os.execute("test -e " .. file_path)
+    if file_exists ~= 0 then
+        print("File does not exist.")
+        return false
+    end
+
+    -- Check if file has execute permissions
+    local has_execute_permission = os.execute("test -x " .. file_path)
+    if has_execute_permission ~= 0 then
+        print("File does not have execute permissions.")
+        return false
+    end
+
+    -- Check if the file contains "debug_info"
+    local contains_debug_info = os.execute("grep -q 'debug_info' " .. file_path)
+    if contains_debug_info ~= 0 then
+        print("File does not contain 'debug_info'.")
+        return false
+    end
+
+    return true
+end
+
 function LaunchELFExecutable()
     local executable = vim.env.DAP_executable
-    local debug_info_cmd = "file " .. executable .. " | grep debug_info"
 
-    if(os.execute(debug_info_cmd) == 512) then
+    if(CheckFile(executable)) then
         print("Founded cached debug executable: " .. executable)
         return executable
     end
 
-    executable = vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
-    debug_info_cmd = "file " .. executable .. " | grep debug_info"
-    if(os.execute(debug_info_cmd) == 512) then
+   executable = vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+    if(CheckFile(executable)) then
         vim.env.DAP_executable = executable
         return executable
     end
