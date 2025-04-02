@@ -45,6 +45,9 @@ local line_theme = {
 require('lualine').setup {
     options = {
         theme = line_theme,
+    },
+    extensions = {
+        "nvim-tree"
     }
 }
 

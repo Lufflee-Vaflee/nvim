@@ -16,20 +16,30 @@ return require('packer').startup(function(use)
 
     use {
         'nvim-telescope/telescope.nvim', branch = '0.1.x',
-        requires = { {'nvim-lua/plenary.nvim'} }
+        requires = {{
+            'nvim-lua/plenary.nvim'
+        }}
     }
 
     use {
         "rockyzhang24/arctic.nvim",
         branch = 'v2',
-        requires = { "rktjmp/lush.nvim" }
+        requires = {
+            "rktjmp/lush.nvim"
+        }
     }
 
-    use ('nvim-treesitter/nvim-treesitter', {run = ':TSUpdate'})
+    use (
+        'nvim-treesitter/nvim-treesitter', {
+        run = ':TSUpdate'
+    })
 
-    use { 'HiPhish/rainbow-delimiters.nvim' }
+    use {
+        'HiPhish/rainbow-delimiters.nvim'
+    }
 
-    use { 'williamboman/mason.nvim',
+    use {
+        'williamboman/mason.nvim',
         opts = {
             ensure_installed = {
                 "clangd",
@@ -62,8 +72,9 @@ return require('packer').startup(function(use)
         }
     }
 
-    use { "rcarriga/nvim-dap-ui",
-    requires = {
+    use {
+        "rcarriga/nvim-dap-ui",
+        requires = {
             "mfussenegger/nvim-dap",
             "nvim-neotest/nvim-nio"
         }
