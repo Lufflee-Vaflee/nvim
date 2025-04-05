@@ -24,3 +24,4 @@ require("finders")
 
 require("line")
 
+require("gitTools")
