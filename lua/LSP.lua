@@ -7,6 +7,11 @@ lsp.on_attach(function(client, bufnr)
     -- see :help lsp-zero-keybindings
     -- to learn the available actions
     lsp.default_keymaps({buffer = bufnr})
+
+    if client.server_capabilities.inlayHintProvider and vim.fn.has('nvim-0.10') == 1 then
+        vim.lsp.inlay_hint.enable(true)
+    end
+
 end)
 
 local on_lua_init = function (client)
@@ -33,6 +38,7 @@ require('mason-lspconfig').setup({
     -- Replace the language servers listed here 
     -- with the ones you want to install
     ensure_installed = {"clangd", "lua_ls", "cmake"},
+    capabilities = require('cmp_nvim_lsp').default_capabilities(),
     handlers = {
         function(server_name)
             require('lspconfig')[server_name].setup{}
@@ -45,6 +51,13 @@ require('mason-lspconfig').setup({
                 }
             }
         end
+    },
+    settings = {
+        Lua = {
+            diagnostics = {
+                globals = { 'vim' } -- Recognize 'vim' as a global in lua
+            }
+        }
     }
 })
 

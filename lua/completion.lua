@@ -1,8 +1,7 @@
 -- Completion configuration for Neovim using nvim-cmp, lsp-zero, and LuaSnip
 
-local lsp_zero = require('lsp-zero')
 local cmp = require('cmp')
-local cmp_action = lsp_zero.cmp_action()
+local cmp_action = require('lsp-zero').cmp_action()
 local luasnip = require('luasnip')
 
 -- Helper function for super tab functionality (from lsp-zero docs)
@@ -20,13 +19,13 @@ cmp.setup({
       luasnip.lsp_expand(args.body)
     end,
   },
-  
+
   -- Configure window appearance
   window = {
     completion = cmp.config.window.bordered(),
     documentation = cmp.config.window.bordered(),
   },
-  
+
   -- Set up completion sources (in priority order)
   sources = cmp.config.sources({
     { name = 'nvim_lsp' }, -- LSP
@@ -34,27 +33,27 @@ cmp.setup({
     { name = 'buffer' },   -- Text within current buffer
     { name = 'path' },     -- File system paths
   }),
-  
+
   -- Configure key mappings
   mapping = cmp.mapping.preset.insert({
     -- Confirm selection
     ['<CR>'] = cmp.mapping.confirm({ select = false }),
-    
+
     -- Navigate between completion items
     ['<C-p>'] = cmp.mapping.select_prev_item(),
     ['<C-n>'] = cmp.mapping.select_next_item(),
-    
+
     -- Scroll documentation
     ['<C-u>'] = cmp.mapping.scroll_docs(-4),
     ['<C-d>'] = cmp.mapping.scroll_docs(4),
-    
+
     -- Cancel completion
     ['<C-e>'] = cmp.mapping.abort(),
-    
+
     -- Navigate between snippet placeholders
     ['<C-f>'] = cmp_action.luasnip_jump_forward(),
     ['<C-b>'] = cmp_action.luasnip_jump_backward(),
-    
+
     -- Super Tab functionality - provided by lsp-zero
     ['<Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
@@ -67,7 +66,7 @@ cmp.setup({
         fallback()
       end
     end, { 'i', 's' }),
-    
+
     ['<S-Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item()
@@ -78,16 +77,16 @@ cmp.setup({
       end
     end, { 'i', 's' }),
   }),
-  
+
   -- Formatting of completion items
   formatting = {
     format = function(entry, vim_item)
       -- Set maximum width of completion details
-      local max_width = 50
+      local max_width = 30
       if vim.fn.strwidth(vim_item.abbr) > max_width then
         vim_item.abbr = string.sub(vim_item.abbr, 1, max_width) .. "..."
       end
-      
+
       -- Add source name to the right
       vim_item.menu = ({
         nvim_lsp = "[LSP]",
@@ -95,49 +94,10 @@ cmp.setup({
         buffer = "[Buffer]",
         path = "[Path]",
       })[entry.source.name]
-      
+
       return vim_item
     end,
   },
-})
-
--- Connect LSP to completion
-lsp_zero.on_attach(function(client, bufnr)
-  -- Additional custom keybindings for LSP can be added here
-  lsp_zero.default_keymaps({buffer = bufnr})
-  
-  -- Enable inlay hints if available
-  if client.server_capabilities.inlayHintProvider and vim.fn.has('nvim-0.10') == 1 then
-    vim.lsp.inlay_hint.enable(true)
-  end
-end)
-
--- Configure LSP capabilities
-local capabilities = require('cmp_nvim_lsp').default_capabilities()
-
--- Set up language servers (using mason-lspconfig)
-require('mason').setup({})
-require('mason-lspconfig').setup({
-  handlers = {
-    lsp_zero.default_setup,
-  },
-  ensure_installed = {
-    'lua_ls',
-    'clangd',
-    'gopls',
-  },
-})
-
--- Configure individual language servers if needed
-require('lspconfig').lua_ls.setup({
-  capabilities = capabilities,
-  settings = {
-    Lua = {
-      diagnostics = {
-        globals = { 'vim' } -- Recognize 'vim' as a global in lua
-      }
-    }
-  }
 })
 
 -- Additional settings for nvim-cmp
