@@ -39,7 +39,7 @@ function LaunchELFExecutable()
         return executable
     end
 
-   executable = vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+    executable = vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
     if(CheckFile(executable)) then
         vim.env.DAP_executable = executable
         return executable
