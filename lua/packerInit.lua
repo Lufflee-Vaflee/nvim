@@ -90,5 +90,12 @@ return require('packer').startup(function(use)
     use {
         'sindrets/diffview.nvim'
     }
-end)
 
+    use {
+        'Lufflee-Vaflee/gitgraph.nvim',
+        requires = {
+            'nvim-lua/plenary.nvim'
+        }
+    }
+
+end)
