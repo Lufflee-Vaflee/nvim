@@ -1,4 +1,3 @@
-
 -- Configuration options with default values
 local config = {
     -- Basic options
@@ -7,8 +6,8 @@ local config = {
     focus_qflist = true,             -- Focus quickfix window after opening
 
     -- Build command options
-    build_command = "make",          -- Default build command
-    build_dir = "",                  -- Default build directory (empty = cwd)
+    build_command = "all",          -- Default build command
+    build_dir = "build",                  -- Default build directory (empty = cwd)
 
     -- Common static analyzers with their output parsing format
     static_analyzers = {
@@ -106,3 +105,30 @@ vim.keymap.set("n", "<leader>qdi", function() lsp_diagnostics_to_qf("INFO") end,
 vim.keymap.set("n", "<leader>qdw", function() lsp_diagnostics_to_qf("WARN") end, { desc = "LSP diagnostics to quickfix" })
 vim.keymap.set("n", "<leader>qde", function() lsp_diagnostics_to_qf("ERROR") end, { desc = "LSP diagnostics to quickfix" })
 
+-- Function to run build command and capture output in quickfix
+function build_to_qf()
+    local cmd = config.build_command
+    local dir = config.build_dir
+
+    -- Change to build directory if specified
+    local current_dir = vim.fn.getcwd()
+    if dir ~= "" then
+        vim.api.nvim_command("lcd " .. current_dir .. "/" .. dir)
+    end
+
+    -- Run make command and populate quickfix
+    vim.api.nvim_command("make! " .. cmd)
+
+    -- Change back to original directory
+    if dir ~= "" then
+        vim.api.nvim_command("lcd " .. current_dir)
+    end
+
+    -- Get error count and handle quickfix window
+    local qf_list = vim.fn.getqflist()
+    handle_qf_window(#qf_list)
+
+    return #qf_list
+end
+
+vim.keymap.set("n", "<leader>qb", build_to_qf, { desc = "Build and capture in quickfix" })

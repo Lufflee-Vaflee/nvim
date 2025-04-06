@@ -23,5 +23,3 @@ require("gitTools")
 
 -- Setup diagnostics module for quickfix integration
 require("diagnostics")
-
-require("diagnostics").setup_keymaps()
