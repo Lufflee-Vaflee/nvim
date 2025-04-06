@@ -7,11 +7,6 @@ require("remaps")
 require("common")
 require("colors")
 
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
-vim.opt.fillchars:append { eob = " " }
-vim.g.loaded_matchparen = true
-
 require("nvim-tree").setup()
 
 require("TreeSitterInit")
@@ -25,3 +20,14 @@ require("finders")
 require("line")
 
 require("gitTools")
+
+-- Setup diagnostics module for quickfix integration
+require("diagnostics").setup({
+    -- You can customize these options as needed
+    auto_open_qflist = true,
+    lsp_severity_filter = "error",
+    build_command = "make",
+    -- Add custom static analyzers if needed
+})
+
+require("diagnostics").setup_keymaps()

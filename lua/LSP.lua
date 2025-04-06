@@ -24,7 +24,7 @@ local on_lua_init = function (client)
             library = {
                 vim.env.VIMRUNTIME
             }
-        }
+        },
     })
 end
 
