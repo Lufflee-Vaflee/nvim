@@ -6,8 +6,7 @@ print("Hello form packer")
 return require('packer').startup(function(use)
     use { 'wbthomason/packer.nvim' }
 
-    use {
-        'nvim-tree/nvim-tree.lua',
+    use { 'nvim-tree/nvim-tree.lua',
         requires = {
             'nvim-tree/nvim-web-devicons',
         },
@@ -88,14 +87,15 @@ return require('packer').startup(function(use)
     }
 
     use {
-        'sindrets/diffview.nvim'
+        'Lufflee-Vaflee/gitgraph.nvim',
+        requires = {
+            'nvim-lua/plenary.nvim',
+            'sindrets/diffview.nvim'
+        }
     }
 
     use {
-        'Lufflee-Vaflee/gitgraph.nvim',
-        requires = {
-            'nvim-lua/plenary.nvim'
-        }
+        'lewis6991/gitsigns.nvim'
     }
 
 end)
