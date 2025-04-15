@@ -1,5 +1,3 @@
-print("Hello from lsp")
-
 require('lsp_signature').setup{
     bind = true,
     handler_opts = {
@@ -35,7 +33,6 @@ local on_lua_init = function (client)
         },
     })
 end
-
 
 require('mason').setup({})
 require('mason-lspconfig').setup({

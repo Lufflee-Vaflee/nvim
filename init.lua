@@ -1,5 +1,3 @@
-print("hello")
-
 require("packerInit")
 
 require("remaps")

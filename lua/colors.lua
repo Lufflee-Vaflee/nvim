@@ -1,5 +1,3 @@
-print("hello from colors")
-
 local rainbow_delimiters = require 'rainbow-delimiters'
 function ColorMyPencils()
     vim.cmd.colorscheme("arctic")

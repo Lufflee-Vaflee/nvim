@@ -1,5 +1,3 @@
-print("Hello from common settings")
-
 vim.opt.nu = true
 vim.opt.relativenumber = true
 

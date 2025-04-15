@@ -1,4 +1,3 @@
-print("Hello from DAP")
 vim.env.DAP_executable = "empty"
 
 function ClearCachedELF()

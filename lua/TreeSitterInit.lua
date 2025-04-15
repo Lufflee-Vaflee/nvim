@@ -1,5 +1,3 @@
-print("Hello from TreeSitter init")
-
 require("nvim-tree").setup()
 
 require("nvim-treesitter.configs").setup {

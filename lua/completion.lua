@@ -1,101 +1,51 @@
--- Completion configuration for Neovim using nvim-cmp, lsp-zero, and LuaSnip
-
 local cmp = require('cmp')
 local luasnip = require('luasnip')
 
--- Helper function for super tab functionality (from lsp-zero docs)
-local has_words_before = function()
-  unpack = unpack or table.unpack
-  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-end
-
 -- Configure nvim-cmp
 cmp.setup({
-  -- Enable snippet support
-  snippet = {
-    expand = function(args)
-      luasnip.lsp_expand(args.body)
-    end,
-  },
+    performance = {
+        debounce = 60,
+        throttle = 30,
+        fetching_timeout = 250,
+        filtering_context_budget = 3,
+        confirm_resolve_timeout = 80,
+        async_budget = 1,
+        max_view_entries = 30,
+    },
+    snippet = {
+        expand = function(args)
+        luasnip.lsp_expand(args.body)
+        end,
+    },
 
-  -- Configure window appearance
-  window = {
-    completion = cmp.config.window.bordered(),
-    documentation = cmp.config.window.bordered(),
-  },
+    window = {
+        completion = cmp.config.window.bordered(),
+        documentation = cmp.config.disable
+    },
 
-  -- Set up completion sources (in priority order)
-  sources = cmp.config.sources({
-    { name = 'nvim_lsp' }, -- LSP
-    { name = 'luasnip' },  -- Snippets
-    { name = 'buffer' },   -- Text within current buffer
-    { name = 'path' },     -- File system paths
-  }),
+    sources = cmp.config.sources({
+        { name = 'nvim_lsp' }, -- LSP
+    }),
 
-  -- Configure key mappings
-  mapping = cmp.mapping.preset.insert({
-    -- Confirm selection
-    ['<CR>'] = cmp.mapping.confirm({ select = false }),
+    mapping = cmp.mapping.preset.insert({
+        ['<CR>'] = cmp.mapping.confirm({ select = false }),
+        ['<M-k>'] = cmp.mapping.select_prev_item(),
+        ['<M-j>'] = cmp.mapping.select_next_item(),
+        ['<M-e>'] = cmp.mapping.abort(),
+    }),
 
-    -- Navigate between completion items
-    ['<M-k>'] = cmp.mapping.select_prev_item(),
-    ['<M-j>'] = cmp.mapping.select_next_item(),
+    formatting = {
+        format = function(_, vim_item)
+        local max_width = 20
+        if vim.fn.strwidth(vim_item.abbr) > max_width then
+            vim_item.abbr = string.sub(vim_item.abbr, 1, max_width) .. "..."
+        end
 
-    -- Cancel completion
-    ['<M-e>'] = cmp.mapping.abort(),
-
-    -- Super Tab functionality - provided by lsp-zero
-    ['<Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      elseif luasnip.expand_or_jumpable() then
-        luasnip.expand_or_jump()
-      elseif has_words_before() then
-        cmp.complete()
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-
-    ['<S-Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item()
-      elseif luasnip.jumpable(-1) then
-        luasnip.jump(-1)
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-  }),
-
-  -- Formatting of completion items
-  formatting = {
-    format = function(entry, vim_item)
-      -- Set maximum width of completion details
-      local max_width = 10
-      if vim.fn.strwidth(vim_item.abbr) > max_width then
-        vim_item.abbr = string.sub(vim_item.abbr, 1, max_width) .. "..."
-      end
-
-      -- Add source name to the right
-      vim_item.menu = ({
-        nvim_lsp = "[LSP]",
-        luasnip = "[Snippet]",
-        buffer = "[Buffer]",
-        path = "[Path]",
-      })[entry.source.name]
-
-      return vim_item
-    end,
-  },
+        return vim_item
+        end,
+    },
 })
 
--- Additional settings for nvim-cmp
--- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
-
--- Avoid showing extra messages when using completion
 vim.opt.shortmess:append('c')
 
-print("LSP and completion configuration loaded")
