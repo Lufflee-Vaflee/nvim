@@ -100,7 +100,7 @@ function toggle_quickfix()
 end
 
 vim.keymap.set("n", "<leader>qf", toggle_quickfix, { desc = "Toggle quickfix window" })
-vim.keymap.set("n", "<leader>qdh", function() lsp_diagnostics_to_qf("HINT") end, { desc = "LSP diagnostics to quickfix" })
+vim.keymap.set("n", "<leader>qd", function() lsp_diagnostics_to_qf("HINT") end, { desc = "LSP diagnostics to quickfix" })
 vim.keymap.set("n", "<leader>qdi", function() lsp_diagnostics_to_qf("INFO") end, { desc = "LSP diagnostics to quickfix" })
 vim.keymap.set("n", "<leader>qdw", function() lsp_diagnostics_to_qf("WARN") end, { desc = "LSP diagnostics to quickfix" })
 vim.keymap.set("n", "<leader>qde", function() lsp_diagnostics_to_qf("ERROR") end, { desc = "LSP diagnostics to quickfix" })
@@ -111,6 +111,8 @@ local cmd = nil
 function build_to_qf()
     if cmd == nil then
         cmd = vim.fn.input('make', " --no-print-directory" .. " --silent" ..' -C '  .. vim.fn.getcwd() .. " all")
+    else
+        cmd = vim.fn.input('make', cmd)
     end
 
     -- Run make command and populate quickfix
@@ -123,10 +125,4 @@ function build_to_qf()
     return #qf_list
 end
 
-function clear_cmd_and_build_to_qf()
-    cmd = nil
-    build_to_qf()
-end
-
-vim.keymap.set("n", "<leader>qbb", build_to_qf, { desc = "Build with cached cmd and capture in quickfix" })
-vim.keymap.set("n", "<leader>qbc", clear_cmd_and_build_to_qf, { desc = "Build and capture in quickfix" })
+vim.keymap.set("n", "<leader>qb", build_to_qf, { desc = "Build with cached cmd and capture in quickfix" })

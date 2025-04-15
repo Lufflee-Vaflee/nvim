@@ -7,7 +7,7 @@ TODO list:
 
 formating:
     add formating command, at least for c/c++
-    optional auto-formating on safe?
+    optional auto-formating on save?
 
 quickfix:
     add static_analyzer support for quickfix window
@@ -31,6 +31,8 @@ completion:
     clean up cmp configuring
     remove lsp-zero?
     try to add AI code sompletion suggestions
+    function signature hints - complete, but plugin is laggy
 
+change packer to lazy nvim for lazy loading
 
 vim-illuminate?

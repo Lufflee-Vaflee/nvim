@@ -1,7 +1,6 @@
 -- Completion configuration for Neovim using nvim-cmp, lsp-zero, and LuaSnip
 
 local cmp = require('cmp')
-local cmp_action = require('lsp-zero').cmp_action()
 local luasnip = require('luasnip')
 
 -- Helper function for super tab functionality (from lsp-zero docs)
@@ -40,19 +39,11 @@ cmp.setup({
     ['<CR>'] = cmp.mapping.confirm({ select = false }),
 
     -- Navigate between completion items
-    ['<C-p>'] = cmp.mapping.select_prev_item(),
-    ['<C-n>'] = cmp.mapping.select_next_item(),
-
-    -- Scroll documentation
-    ['<C-u>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-d>'] = cmp.mapping.scroll_docs(4),
+    ['<M-k>'] = cmp.mapping.select_prev_item(),
+    ['<M-j>'] = cmp.mapping.select_next_item(),
 
     -- Cancel completion
-    ['<C-e>'] = cmp.mapping.abort(),
-
-    -- Navigate between snippet placeholders
-    ['<C-f>'] = cmp_action.luasnip_jump_forward(),
-    ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+    ['<M-e>'] = cmp.mapping.abort(),
 
     -- Super Tab functionality - provided by lsp-zero
     ['<Tab>'] = cmp.mapping(function(fallback)
@@ -82,7 +73,7 @@ cmp.setup({
   formatting = {
     format = function(entry, vim_item)
       -- Set maximum width of completion details
-      local max_width = 30
+      local max_width = 10
       if vim.fn.strwidth(vim_item.abbr) > max_width then
         vim_item.abbr = string.sub(vim_item.abbr, 1, max_width) .. "..."
       end
