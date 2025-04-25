@@ -1,15 +1,7 @@
--- Configuration options with default values
 local config = {
     -- Basic options
-    auto_open_qflist = true,         -- Auto-open quickfix after collecting diagnostics
     auto_close_qflist = false,       -- Auto-close quickfix when no errors
-    focus_qflist = true,             -- Focus quickfix window after opening
 
-    -- Build command options
-    build_command = "all",          -- Default build command
-    build_dir = "build",                  -- Default build directory (empty = cwd)
-
-    -- Common static analyzers with their output parsing format
     static_analyzers = {
         clang_tidy = {
             command = "clang-tidy",
@@ -25,13 +17,13 @@ local config = {
 }
 
 -- Convert LSP diagnostics severity to quickfix type
-local function severity_to_type(severity)
+local function severityToType(severity)
     local types = { "E", "W", "I", "N" }
     return types[severity] or "E"
 end
 
 -- Convert severity name to severity level
-local function severity_name_to_level(name)
+local function SeveretyToLevel(name)
     if name == "ERROR" then
         return 1
     end
@@ -49,9 +41,9 @@ local function severity_name_to_level(name)
 end
 
 -- Function to collect LSP diagnostics and put them in quickfix
-function lsp_diagnostics_to_qf(severity_filter)
+function LspToQf(severity_filter)
     local diagnostics = vim.diagnostic.get(nil)
-    local min_severity = severity_name_to_level(severity_filter)
+    local min_severity = SeveretyToLevel(severity_filter)
 
     local qf_items = {}
     for _, diagnostic in ipairs(diagnostics) do
@@ -61,35 +53,28 @@ function lsp_diagnostics_to_qf(severity_filter)
                 lnum = diagnostic.lnum + 1,  -- LSP uses 0-based, quickfix uses 1-based
                 col = diagnostic.col + 1,    -- LSP uses 0-based, quickfix uses 1-based
                 text = diagnostic.message,
-                type = severity_to_type(diagnostic.severity)
+                type = severityToType(diagnostic.severity)
             })
         end
     end
 
     vim.fn.setqflist(qf_items, 'r')
-    handle_qf_window(#qf_items)
+    HandleQF(#qf_items)
 
     return #qf_items
 end
 
 -- Helper function to open/close quickfix window based on config
-function handle_qf_window(count)
+function HandleQF(count)
     if count > 0 then
-        if config.auto_open_qflist then
-            vim.api.nvim_command("copen")
-            if config.focus_qflist then
-                vim.api.nvim_command("wincmd J") -- Move to bottom
-            end
-        end
-    else
-        if config.auto_close_qflist then
-            vim.api.nvim_command("cclose")
-        end
+        vim.api.nvim_command("copen")
+    elseif config.auto_close_qflist then
+        vim.api.nvim_command("cclose")
     end
 end
 
 -- Function to toggle the quickfix window
-function toggle_quickfix()
+function ToggleQF()
     local qf_win = vim.fn.getqflist({winid = 0}).winid
     if qf_win == 0 then
         vim.api.nvim_command("copen")
@@ -99,30 +84,28 @@ function toggle_quickfix()
     end
 end
 
-vim.keymap.set("n", "<leader>qf", toggle_quickfix, { desc = "Toggle quickfix window" })
-vim.keymap.set("n", "<leader>qd", function() lsp_diagnostics_to_qf("HINT") end, { desc = "LSP diagnostics to quickfix" })
-vim.keymap.set("n", "<leader>qdi", function() lsp_diagnostics_to_qf("INFO") end, { desc = "LSP diagnostics to quickfix" })
-vim.keymap.set("n", "<leader>qdw", function() lsp_diagnostics_to_qf("WARN") end, { desc = "LSP diagnostics to quickfix" })
-vim.keymap.set("n", "<leader>qde", function() lsp_diagnostics_to_qf("ERROR") end, { desc = "LSP diagnostics to quickfix" })
-
 local cmd = nil
 
--- Function to run build command and capture output in quickfix
-function build_to_qf()
+function BuildToQF()
     if cmd == nil then
         cmd = vim.fn.input('make', " --no-print-directory" .. " --silent" ..' -C '  .. vim.fn.getcwd() .. " all")
     else
         cmd = vim.fn.input('make', cmd)
     end
 
-    -- Run make command and populate quickfix
     vim.api.nvim_command("make! " .. cmd)
 
-    -- Get error count and handle quickfix window
     local qf_list = vim.fn.getqflist()
-    handle_qf_window(#qf_list)
+    HandleQF(#qf_list)
 
     return #qf_list
 end
 
-vim.keymap.set("n", "<leader>qb", build_to_qf, { desc = "Build with cached cmd and capture in quickfix" })
+vim.keymap.set("n", "<leader>qf", ToggleQF, { desc = "Toggle quickfix window" })
+vim.keymap.set("n", "<leader>qdd", function() LspToQf("HINT") end, { desc = "LSP diagnostics to quickfix" })
+vim.keymap.set("n", "<leader>qdi", function() LspToQf("INFO") end, { desc = "LSP diagnostics to quickfix" })
+vim.keymap.set("n", "<leader>qdw", function() LspToQf("WARN") end, { desc = "LSP diagnostics to quickfix" })
+vim.keymap.set("n", "<leader>qde", function() LspToQf("ERROR") end, { desc = "LSP diagnostics to quickfix" })
+
+vim.keymap.set("n", "<leader>qb", BuildToQF, { desc = "Build with cached cmd and capture in quickfix" })
+

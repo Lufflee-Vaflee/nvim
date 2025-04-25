@@ -5,8 +5,6 @@ require("remaps")
 require("common")
 require("colors")
 
-require("nvim-tree").setup()
-
 require("TreeSitterInit")
 
 require("LSP")
@@ -22,3 +20,6 @@ require("gitTools")
 require("diagnostics")
 
 require("completion")
+
+-- Initialize external formatter
+require("format").setup()

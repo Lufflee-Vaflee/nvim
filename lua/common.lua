@@ -41,4 +41,3 @@ vim.g.loaded_netrwPlugin = 1
 vim.opt.fillchars:append { eob = " " }
 vim.g.loaded_matchparen = true
 
-

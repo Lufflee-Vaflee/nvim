@@ -46,6 +46,20 @@ cmp.setup({
     },
 })
 
+require('lsp_signature').setup{
+    bind = true,
+    handler_opts = {
+        border = "rounded"
+    },
+    hint_enable = true,  -- Virtual text hint
+    hint_prefix = " ",  -- Prefix for parameter hints
+    hi_parameter = "Search",  -- Color for current parameter
+    floating_window = true,  -- Show floating window for signature
+    fix_pos = false,  -- Let the window position adjust to avoid covering text
+    always_trigger = false,  -- Only trigger when in argument position
+    toggle_key = '<C-k>',  -- Toggle signature on and off with Ctrl+k
+}
+
 vim.o.completeopt = 'menuone,noselect'
 vim.opt.shortmess:append('c')
 
