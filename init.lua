@@ -3,6 +3,7 @@ require("packerInit")
 require("remaps")
 
 require("common")
+
 require("colors")
 
 require("TreeSitterInit")

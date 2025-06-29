@@ -42,13 +42,13 @@ return require('packer').startup(function(use)
                 "cmake-language-server",
                 "gopls",
                 "lua-language-server",
-                "codelldb"
+                "codelldb",
+                "delve"
             }
         }
     }
 
-    use {
-        'VonHeikemen/lsp-zero.nvim',
+    use { 'VonHeikemen/lsp-zero.nvim',
         branch = 'v3.x',
         requires = {
             {'williamboman/mason.nvim'},
@@ -69,12 +69,10 @@ return require('packer').startup(function(use)
         }
     }
 
+
     use {
-        "rcarriga/nvim-dap-ui",
-        requires = {
-            "mfussenegger/nvim-dap",
-            "nvim-neotest/nvim-nio"
-        }
+        "igorlfs/nvim-dap-view",
+        opts = {},
     }
 
     use {

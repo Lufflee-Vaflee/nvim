@@ -3,9 +3,8 @@ vim.env.DAP_executable = "empty"
 function ClearCachedELF()
     print("Cleared cashed ELF: " .. vim.env.DAP_executable)
     vim.env.DAP_executable = "empty"
-end
 
-function CheckFile(file_path)
+end function CheckFile(file_path)
     -- Check if file exists
     local file_exists = os.execute("test -e " .. file_path)
     if file_exists ~= 0 then
@@ -13,7 +12,7 @@ function CheckFile(file_path)
         return false
     end
 
-    -- Check if file has execute permissions
+    -- Check if file has execute permissions local has_execute_permission = os.execute("test -x " .. file_path)
     local has_execute_permission = os.execute("test -x " .. file_path)
     if has_execute_permission ~= 0 then
         print("File does not have execute permissions.")
@@ -33,8 +32,7 @@ end
 function LaunchELFExecutable()
     local executable = vim.env.DAP_executable
 
-    if(CheckFile(executable)) then
-        print("Founded cached debug executable: " .. executable)
+    if(CheckFile(executable)) then print("Founded cached debug executable: " .. executable)
         return executable
     end
 
@@ -52,11 +50,11 @@ end
 
 function ConfigureDAP()
     local dap = require("dap")
-    local path_to_dap = vim.fn.stdpath("data") .. "/mason/bin/codelldb"
+    local path_to_codelldb = vim.fn.stdpath("data") .. "/mason/bin/codelldb"
 
     dap.adapters.codelldb = {
           type = "executable",
-          command = path_to_dap,
+          command = path_to_codelldb,
     }
 
     dap.configurations.cpp = {
@@ -70,8 +68,65 @@ function ConfigureDAP()
         },
     }
 
-    local dapui = require("dapui")
-    dapui.setup()
+    dap.configurations.c = dap.configurations.cpp
+
+    dap.adapters.delve = function(callback, config)
+        if config.mode == 'remote' and config.request == 'attach' then
+            callback({
+                type = 'server',
+                host = config.host or '127.0.0.1',
+                port = config.port or '38697'
+            })
+        else
+            callback({
+                type = 'server',
+                port = '${port}',
+                executable = {
+                    command = 'dlv',
+                    args = { 'dap', '-l', '127.0.0.1:${port}', '--log', '--log-output=dap' },
+                    detached = vim.fn.has("win32") == 0,
+                }
+            })
+        end
+    end
+
+    dap.configurations.go = {
+        {
+            type = "delve",
+            name = "Debug",
+            request = "launch",
+            program = "${file}",
+            outputMode = "remote"
+        },
+        {
+            type = "delve",
+            name = "Debug test", -- configuration for debugging test files
+            request = "launch",
+            mode = "test",
+            program = "${file}",
+            outputMode = "remote"
+        },
+        {
+            type = "delve",
+            name = "Debug test (go.mod)",
+            request = "launch",
+            mode = "test",
+            program = "./${relativeFileDirname}",
+            outputMode = "remote"
+        }
+    }
+
+    local dapui = require("dap-view")
+
+    dapui.setup({
+        windows = {
+        height = 20,
+        terminal = {
+            hide = { "delve" }
+        },
+    },
+    })
+
     dap.listeners.after.event_initialized["dapui_config"] = function()
         dapui.open()
     end
@@ -91,7 +146,11 @@ function ConfigureDAP()
 
     vim.keymap.set('n', '<Leader>de', function()
         require('dap').close()
-        require('dapui').close()
+        dapui.close()
+    end)
+
+    vim.keymap.set('n', '<Leader>dt', function()
+        dapui.toggle()
     end)
 
     vim.keymap.set('n', '<Leader>dc', function()
