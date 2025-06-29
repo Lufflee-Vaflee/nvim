@@ -101,11 +101,22 @@ function BuildToQF()
     return #qf_list
 end
 
+local vtext = false
+
+function ToggleVText()
+    vim.diagnostic.config({
+      virtual_text = vtext,
+    })
+
+    vtext = not vtext
+end
+
 vim.keymap.set("n", "<leader>qf", ToggleQF, { desc = "Toggle quickfix window" })
 vim.keymap.set("n", "<leader>qdd", function() LspToQf("HINT") end, { desc = "LSP diagnostics to quickfix" })
 vim.keymap.set("n", "<leader>qdi", function() LspToQf("INFO") end, { desc = "LSP diagnostics to quickfix" })
 vim.keymap.set("n", "<leader>qdw", function() LspToQf("WARN") end, { desc = "LSP diagnostics to quickfix" })
 vim.keymap.set("n", "<leader>qde", function() LspToQf("ERROR") end, { desc = "LSP diagnostics to quickfix" })
 
+vim.keymap.set("n", "<leader>qdv", ToggleVText, { desc = "Toggle virtual text" })
 vim.keymap.set("n", "<leader>qb", BuildToQF, { desc = "Build with cached cmd and capture in quickfix" })
 
