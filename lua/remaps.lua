@@ -13,4 +13,11 @@ vim.keymap.set("n", "<leader>l", "<C-W>l")
 
 vim.keymap.set("n", "<leader>wq", "<cmd>q<CR>")
 
+-- Paste without replacing clipboard register
+vim.keymap.set("x", "<leader>p", [=["_dP]=])
+vim.keymap.set({"n", "v"}, "<leader>d", [=["_d]=])
+
+-- Alternative paste mappings that preserve register
+vim.keymap.set("x", "p", [=["_dP]=])
+vim.keymap.set("x", "P", [=["_dP]=])
 

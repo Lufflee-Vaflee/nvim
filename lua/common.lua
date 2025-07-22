@@ -36,6 +36,9 @@ vim.opt.isfname:append("@-@")
 
 vim.opt.updatetime = 50
 
+-- Clipboard synchronization - makes yank/paste work with system clipboard
+vim.opt.clipboard = "unnamedplus"
+
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 vim.opt.fillchars:append { eob = " " }

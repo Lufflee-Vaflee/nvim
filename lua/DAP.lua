@@ -75,7 +75,10 @@ function ConfigureDAP()
             callback({
                 type = 'server',
                 host = config.host or '127.0.0.1',
-                port = config.port or '38697'
+                port = config.port or '38697',
+                options = {
+                    initialize_timeout_sec = 30
+                }
             })
         else
             callback({
@@ -85,7 +88,10 @@ function ConfigureDAP()
                     command = 'dlv',
                     args = { 'dap', '-l', '127.0.0.1:${port}', '--log', '--log-output=dap' },
                     detached = vim.fn.has("win32") == 0,
-                }
+                },
+                options = {
+                    initialize_timeout_sec = 30
+                },
             })
         end
     end
@@ -96,7 +102,9 @@ function ConfigureDAP()
             name = "Debug",
             request = "launch",
             program = "${file}",
-            outputMode = "remote"
+            outputMode = "remote",
+--            args = {
+--            }
         },
         {
             type = "delve",

@@ -22,6 +22,3 @@ require("diagnostics")
 
 require("completion")
 
--- Initialize external formatter
-require("format").setup()
-

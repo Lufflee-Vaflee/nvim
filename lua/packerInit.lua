@@ -81,7 +81,7 @@ return require('packer').startup(function(use)
 
     use {
         'Lufflee-Vaflee/gitgraph.nvim',
-        branch = 'up',
+        branch = 'custom',
         requires = {
             'nvim-lua/plenary.nvim',
             'sindrets/diffview.nvim'
