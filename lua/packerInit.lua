@@ -31,10 +31,6 @@ return require('packer').startup(function(use)
     })
 
     use {
-        'HiPhish/rainbow-delimiters.nvim'
-    }
-
-    use {
         'williamboman/mason.nvim',
         opts = {
             ensure_installed = {
@@ -85,6 +81,7 @@ return require('packer').startup(function(use)
 
     use {
         'Lufflee-Vaflee/gitgraph.nvim',
+        branch = 'up',
         requires = {
             'nvim-lua/plenary.nvim',
             'sindrets/diffview.nvim'

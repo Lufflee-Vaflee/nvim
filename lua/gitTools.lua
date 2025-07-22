@@ -28,6 +28,8 @@ gitgraph.setup({
         on_select_commit = function(commit)
             if pcall(require, "diffview") then
                 vim.cmd(':DiffviewOpen ' .. commit.hash .. '^!')
+                vim.cmd(":tabprevious")
+                vim.cmd(":tabclose")
             else
                 print('Selected commit: ' .. commit.hash)
             end
@@ -36,6 +38,8 @@ gitgraph.setup({
         on_select_range_commit = function(from, to)
             if pcall(require, "diffview") then
                 vim.cmd(':DiffviewOpen ' .. from.hash .. '~1..' .. to.hash)
+                vim.cmd(":tabprevious")
+                vim.cmd(":tabclose")
             else
                 print('Selected range: ' .. from.hash .. ' to ' .. to.hash)
             end
@@ -45,7 +49,10 @@ gitgraph.setup({
 
 local on_gitgraph_open = function()
     vim.cmd.NvimTreeClose()
+    vim.cmd(":tabnew")
     gitgraph.draw({}, { all = true, max_count = 5000 })
+    vim.cmd(":tabprevious")
+    vim.cmd(":tabclose")
 end
 
 -- Keymappings for gitgraph.nvim
