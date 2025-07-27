@@ -17,7 +17,7 @@ local line_theme = {
     normal = {
         b = { fg = colors.green, bg = colors.black },
         a = { fg = colors.black, bg = colors.green, gui = 'bold' },
-        c = { fg = colors.white, bg = nil },
+        c = { fg = colors.green, bg = nil },
     },
     visual = {
         b = { fg = colors.pink, bg = colors.black },
@@ -31,7 +31,7 @@ local line_theme = {
     replace = {
         b = { fg = colors.lightred, bg = colors.black },
         a = { fg = colors.black, bg = colors.lightred, gui = 'bold' },
-        c = { fg = colors.white, bg = nil },
+        c = { fg = colors.lightred, bg = nil },
     },
     insert = {
         b = { fg = colors.blue, bg = colors.black },

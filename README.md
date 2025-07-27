@@ -29,6 +29,4 @@ completion:
 
 change packer to lazy nvim for lazy loading
 
-vim-illuminate?
-
 get rid of DAP and learn how to use GDB?

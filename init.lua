@@ -22,3 +22,5 @@ require("diagnostics")
 
 require("completion")
 
+require("QF")
+
