@@ -14,13 +14,11 @@ require("DAP")
 
 require("finders")
 
-require("line")
-
 require("gitTools")
-
-require("diagnostics")
 
 require("completion")
 
 require("QF")
+
+require("cmd")
 

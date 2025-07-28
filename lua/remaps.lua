@@ -17,3 +17,14 @@ vim.keymap.set({"n", "v"}, "<leader>d", [=["_d]=])
 vim.keymap.set("x", "p", [=["_dP]=])
 vim.keymap.set("x", "P", [=["_dP]=])
 
+local vtext = false
+
+function ToggleVText()
+    vtext = not vtext
+    vim.diagnostic.config({
+      virtual_text = vtext,
+    })
+end
+
+vim.keymap.set("n", "<leader>qv", ToggleVText, { desc = "Toggle virtual text" })
+

@@ -1,8 +1,3 @@
-vim.api.nvim_set_hl(0, "DiffTextChanged", { fg =0x1F58AE,  link = "DiffLineChanged" } )
-
-vim.opt.fillchars:append { eob = " ", diff = "╱"}
-vim.api.nvim_set_hl(0, "DiffDelete", { fg = "#5a5a5a", link="DiffLineDelete" })
-
 -- gitgraph.nvim configuration
 local gitgraph = require('gitgraph')
 gitgraph.setup({
