@@ -4,6 +4,3 @@ vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find f
 --vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
 --vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' })
 
--- Configure vim's :grep to use find with grep
-
-

@@ -9,6 +9,10 @@ vim.api.nvim_create_autocmd("FileType", {
 local qf_original_list = {}
 local qf_is_filtered = false
 
+function ResetQFFiltering()
+    qf_is_filtered = false
+end
+
 local function deep_copy(t)
     if type(t) ~= 'table' then return t end
     local copy = {}
@@ -20,7 +24,6 @@ end
 
 local function toggle_qf_filter()
     local qflist = vim.fn.getqflist()
-    if #qflist == 0 then return end
 
     if not qf_is_filtered then
         qf_original_list = deep_copy(qflist)
